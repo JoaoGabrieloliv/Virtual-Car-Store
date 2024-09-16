@@ -14,6 +14,7 @@ import {
   updateProfile,
   signOut,
 } from "firebase/auth";
+import toast from "react-hot-toast";
 
 const schema = z.object({
   name: z.string().nonempty("O campo nome é obrigatório"),
@@ -61,10 +62,12 @@ export function Register() {
         });
 
         console.log("CADASTRADOO");
+        toast.success("Bem Vindo ao webCar!");
         navigate("/dashboard", { replace: true });
       })
       .catch((error) => {
         console.log("ERRO AO CADASTRAR");
+        toast.error("Erro ao criar usuário.")
         console.log(error);
       });
   }
