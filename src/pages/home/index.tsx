@@ -13,7 +13,7 @@ interface CarsProps {
   price: string | number;
   city: string;
   km: string;
-  images: CarImagesProps;
+  images: CarImagesProps[];
 }
 
 interface CarImagesProps {

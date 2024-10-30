@@ -116,7 +116,8 @@ export function New() {
       const image = e.target.files[0];
 
       if (image.type === "image/jpeg" || image.type === "image/png") {
-        await handleUpload(image);
+        const previewUrl = URL.createObjectURL(image); // Gera o preview
+        await handleUpload(image, previewUrl); // Passa o preview para handleUpload
       } else {
         alert("Envie uma imagem .jpeg ou .png!");
         return;
@@ -124,14 +125,13 @@ export function New() {
     }
   }
 
-  async function handleUpload(image: File) {
+  async function handleUpload(image: File, previewUrl: string) {
     if (!user?.uid) {
       return;
     }
 
     const currentUid = user?.uid;
     const uidImage = uuidV4();
-
     const uploadRef = ref(storage, `images/${currentUid}/${uidImage}`);
 
     uploadBytes(uploadRef, image).then((snapshot) => {
@@ -139,12 +139,14 @@ export function New() {
         const imageItem = {
           name: uidImage,
           uid: currentUid,
-          previewUrl: URL.createObjectURL(image),
+          previewUrl, // Adiciona o previewUrl direto aqui
           url: downloadUrl,
         };
 
         setCarImages((images) => [...images, imageItem]);
-        toast.success("Imagem enviada com sucesso!")
+        toast.success("Imagem enviada com sucesso!");
+
+        console.log("Imagem adicionada:", imageItem); // Log para debug
       });
     });
   }
